@@ -1,0 +1,54 @@
+package com.example.memolist;
+
+import java.util.Calendar;
+public class Memo {
+    public int memoID;
+    public String memoTitle;
+    public String memoDescription;
+    public String prioritySelection;
+    public Calendar date;
+    public Memo() {
+        memoID = -1;
+        date = Calendar.getInstance();
+    }
+
+    public int getMemoID() {
+        return memoID;
+    }
+
+    public void setMemoID(int i) {
+        memoID = i;
+    }
+
+    public String getMemoTitle() {
+        return memoTitle;
+    }
+
+    public void setMemoTitle(String s) {
+        memoTitle = s;
+    }
+
+    public String getMemoDescription() {
+        return memoDescription;
+    }
+
+    public void setMemoDescription(String s) {
+        memoDescription = s;
+    }
+
+    public String getPrioritySelection() {
+        return prioritySelection;
+    }
+
+    public void setPrioritySelection(String s) {
+        prioritySelection = s;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(Calendar c) {
+        date = c;
+    }
+}
