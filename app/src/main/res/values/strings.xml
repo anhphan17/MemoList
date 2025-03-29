@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">memoList</string>
+    <string name="goes_to_the_memo_list_layout">Goes to the memo list layout</string>
+    <string name="settings_layout_diabled">settings layout (diabled)</string>
+    <string name="sort_by">Sort By:</string>
+    <string name="date">Date</string>
+    <string name="priority">Priority</string>
+    <string name="title">Title</string>
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
+    <string name="order_by">Order By:</string>
+    <string name="search">Search</string>
 </resources>
