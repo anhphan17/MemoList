@@ -9,7 +9,7 @@ public class MemoDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "memolist.db";
 
     private static final int DATABASE_VERSION = 1;
-    private static final String CREATE_TABLE_MEMO = "" +
+    private static final String CREATE_TABLE_MEMO =
             "create table memo (id integer primary key autoincrement, "
             + "memotitle text not null, memodescription text not null, "
             + "priorityselection text, date text);";

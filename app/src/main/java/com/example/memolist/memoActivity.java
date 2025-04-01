@@ -37,6 +37,7 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
 
         dateButton();
         toggleButton();
+        saveButton();
     }
 
     private void dateButton(){
@@ -86,6 +87,45 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         setForEditing(false);
         toggleBtn.setOnClickListener(v -> {
             setForEditing(toggleBtn.isChecked());
+        });
+    }
+
+    private void saveButton() {
+        Button saveButton = findViewById(R.id.buttonSave);
+        saveButton.setOnClickListener(v -> {
+            boolean wasSuccessful;
+            MemoDataSource ds = new MemoDataSource(memoActivity.this);
+
+            try {
+                ds.open();
+
+                if(currentMemo.getMemoID() == -1) {
+                    wasSuccessful = ds.insertMemo(currentMemo);
+                    int newId = ds.getLastMemoID();
+                    currentMemo.setMemoID(newId);
+
+                }
+
+
+
+                else {
+                    wasSuccessful = ds.updateMemo(currentMemo);
+                }
+                ds.close();
+            }
+
+            catch (Exception e) {
+                wasSuccessful = false;
+            }
+
+            if(wasSuccessful){
+                ToggleButton editToggle = findViewById(R.id.toggleButton);
+                editToggle.toggle();
+                setForEditing(false);
+
+            }
+
+
         });
     }
 
