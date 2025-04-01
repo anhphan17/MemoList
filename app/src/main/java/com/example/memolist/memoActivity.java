@@ -1,9 +1,14 @@
 package com.example.memolist;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -38,6 +43,11 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         dateButton();
         toggleButton();
         saveButton();
+        initPriority();
+        initTextChangedEvents();
+        initSettingsBtn();
+        initMemoList();
+
     }
 
     private void dateButton(){
@@ -90,6 +100,68 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         });
     }
 
+    private void initTextChangedEvents() {
+        final EditText etMemoName = findViewById(R.id.editTextMemo);
+        etMemoName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentMemo.setMemoTitle(etMemoName.getText().toString());
+            }
+        });
+
+        final EditText etMemoInput = findViewById(R.id.editInput);
+        etMemoInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentMemo.setMemoDescription(etMemoInput.getText().toString());
+            }
+        });
+
+    }
+
+
+
+
+    private void initPriority() {
+        RadioGroup priority = findViewById(R.id.rgLevels);
+        priority.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rbL1 = findViewById(R.id.radioButtonL1);
+                RadioButton rbL2 = findViewById(R.id.radioButtonL2);
+                if(rbL1.isChecked()) {
+                    currentMemo.setPrioritySelection("Level 1");
+                }
+                else if(rbL2.isChecked()){
+                    currentMemo.setPrioritySelection("Level 2");
+                }
+                else {
+                    currentMemo.setPrioritySelection("Level 3");
+                }
+            }
+        });
+    }
+
     private void saveButton() {
         Button saveButton = findViewById(R.id.buttonSave);
         saveButton.setOnClickListener(v -> {
@@ -128,6 +200,20 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
 
         });
     }
+
+
+    private void initMemoList() {
+        ImageButton ibMemo = findViewById(R.id.ibMemoList);
+        ibMemo.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
+    }
+    private void initSettingsBtn() {
+        ImageButton ibSettings = findViewById(R.id.ibSettings);
+        ibSettings.setEnabled(false);
+    }
+
 
 
 }
