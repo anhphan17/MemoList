@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
@@ -164,54 +165,62 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
 
     private void saveButton() {
         Button saveButton = findViewById(R.id.buttonSave);
+        EditText titleText = findViewById(R.id.editTextMemo);
+        EditText descriptionEditText = findViewById(R.id.editInput);
         saveButton.setOnClickListener(v -> {
-            boolean wasSuccessful;
-            MemoDataSource ds = new MemoDataSource(memoActivity.this);
 
-            try {
-                ds.open();
 
-                if(currentMemo.getMemoID() == -1) {
-                    wasSuccessful = ds.insertMemo(currentMemo);
-                    int newId = ds.getLastMemoID();
-                    currentMemo.setMemoID(newId);
+            if(titleText.getText().toString().isEmpty() ||
+                    descriptionEditText.getText().toString().isEmpty()){
+                Toast.makeText(memoActivity.this, "Please enter a title and description.",
+                        Toast.LENGTH_LONG).show();
+            }
+            else {
+
+                boolean wasSuccessful;
+                MemoDataSource ds = new MemoDataSource(memoActivity.this);
+
+                try {
+                    ds.open();
+
+                    if (currentMemo.getMemoID() == -1) {
+                        wasSuccessful = ds.insertMemo(currentMemo);
+                        int newId = ds.getLastMemoID();
+                        currentMemo.setMemoID(newId);
+
+                    } else {
+                        wasSuccessful = ds.updateMemo(currentMemo);
+                    }
+                    ds.close();
+                } catch (Exception e) {
+                    wasSuccessful = false;
+                }
+
+                if (wasSuccessful) {
+                    ToggleButton editToggle = findViewById(R.id.toggleButton);
+                    editToggle.toggle();
+                    setForEditing(false);
 
                 }
 
-
-
-                else {
-                    wasSuccessful = ds.updateMemo(currentMemo);
-                }
-                ds.close();
             }
-
-            catch (Exception e) {
-                wasSuccessful = false;
-            }
-
-            if(wasSuccessful){
-                ToggleButton editToggle = findViewById(R.id.toggleButton);
-                editToggle.toggle();
-                setForEditing(false);
-
-            }
-
-
         });
     }
 
 
     private void initMemoList() {
-        ImageButton ibMemo = findViewById(R.id.ibMemoList);
+        Button ibMemo = findViewById(R.id.buttonList);
         ibMemo.setOnClickListener(v -> {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });
     }
     private void initSettingsBtn() {
-        ImageButton ibSettings = findViewById(R.id.ibSettings);
-        ibSettings.setEnabled(false);
+        Button ibSettings = findViewById(R.id.buttonSettings);
+        ibSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Settings.class);
+            startActivity(intent);
+        });
     }
 
 

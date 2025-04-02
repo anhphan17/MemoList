@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         Button add = findViewById(R.id.buttonAddMemo);
         add.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, memoActivity.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
     }
