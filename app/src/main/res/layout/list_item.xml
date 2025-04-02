@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textMemoDescription" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textMemoDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textMemoPriority" />
 
     <Button
-        android:id="@+id/buttonDeleteContact"
+        android:id="@+id/buttonDeleteMemo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -64,6 +64,7 @@
         android:background="@color/transparent"
         android:text="DELETE"
         android:textColor="@color/red"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textMemoTitle" />

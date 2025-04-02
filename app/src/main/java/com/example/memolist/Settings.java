@@ -50,7 +50,7 @@ public class Settings extends AppCompatActivity {
 
     private void initSettings() {
         String sortBy = getSharedPreferences("MyMemoListPreferences",
-                MODE_PRIVATE).getString("sortfield", "title");
+                MODE_PRIVATE).getString("sortfield", "memotitle");
         String sortOrder = getSharedPreferences("MyMemoListPreferences",
                 MODE_PRIVATE).getString("sortorder", "ASC");
 
@@ -58,7 +58,7 @@ public class Settings extends AppCompatActivity {
         RadioButton rbDate = findViewById(R.id.rbDate);
         RadioButton rbPriority = findViewById(R.id.rbPriority);
 
-        if (sortBy.equalsIgnoreCase("title")) {
+        if (sortBy.equalsIgnoreCase("memotitle")) {
             rbTitle.setChecked(true);
         } else if (sortBy.equalsIgnoreCase("date")) {
             rbDate.setChecked(true);

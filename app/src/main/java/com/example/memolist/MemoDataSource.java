@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class MemoDataSource {
 
     private SQLiteDatabase database;
@@ -76,6 +79,66 @@ public class MemoDataSource {
         }
         return lastId;
     }
+
+    public ArrayList<Memo> getMemos(String sortField, String sortOrder) {
+        ArrayList<Memo> memos = new ArrayList<Memo>();
+        try {
+            String query = "SELECT * FROM memo ORDER BY " + sortField + " " + sortOrder;
+            Cursor cursor = database.rawQuery(query, null);
+
+            Memo newMemo;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                newMemo = new Memo();
+                newMemo.setMemoID(cursor.getInt(0));
+                newMemo.setMemoTitle(cursor.getString(1));
+                newMemo.setMemoDescription(cursor.getString(2));
+                newMemo.setPrioritySelection(cursor.getString(3));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(Long.valueOf(cursor.getString(4)));
+                newMemo.setDate(calendar);
+                memos.add(newMemo);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        catch (Exception e) {
+            memos = new ArrayList<Memo>();
+        }
+        return memos;
+    }
+
+    public boolean deleteMemo(int memoId) {
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("memo", "id=" + memoId, null) > 0;
+        }
+        catch (Exception e) {
+
+        }
+        return didDelete;
+    }
+
+    public Memo getSpecificMemo(int memoId) {
+        Memo memo = new Memo();
+        String query = "SELECT * FROM memo WHERE id=" + memoId;
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            memo.setMemoID(cursor.getInt(0));
+            memo.setMemoTitle(cursor.getString(1));
+            memo.setMemoDescription(cursor.getString(2));
+            memo.setPrioritySelection(cursor.getString(3));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(Long.valueOf(cursor.getString(4)));
+            memo.setDate(calendar);
+
+            cursor.close();
+        }
+        return memo;
+    }
+
+
 
 
 }

@@ -1,6 +1,9 @@
 package com.example.memolist;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
+
 public class Memo {
     public int memoID;
     public String memoTitle;
@@ -46,6 +49,11 @@ public class Memo {
 
     public Calendar getDate() {
         return date;
+    }
+
+    public String getDateAsString() {
+        SimpleDateFormat dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        return dateString.format(date.getTime());
     }
 
     public void setDate(Calendar c) {

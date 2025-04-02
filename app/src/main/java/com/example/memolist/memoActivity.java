@@ -1,12 +1,18 @@
 package com.example.memolist;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
@@ -35,9 +41,60 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
             return insets;
         });
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            initMemo(extras.getInt("memoID"));
+        }
+        else {
+            currentMemo = new Memo();
+        }
+
+
+        setForEditing(false);
         dateButton();
         toggleButton();
         saveButton();
+        initPriority();
+        initTextChangedEvents();
+        initSettingsBtn();
+        initMemoList();
+
+
+    }
+
+    private void initMemo(int id) {
+        MemoDataSource ds = new MemoDataSource(memoActivity.this);
+        try {
+            ds.open();
+            currentMemo = ds.getSpecificMemo(id);
+            ds.close();
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Load Contact Failed.", Toast.LENGTH_LONG).show();
+        }
+
+        EditText editMemoName = findViewById(R.id.editTextMemo);
+        EditText editMemoDescription = findViewById(R.id.editInput);
+        TextView date = findViewById(R.id.textViewMemoDate);
+        RadioGroup prioritySelectionRG = findViewById(R.id.rgLevels);
+
+        editMemoName.setText(currentMemo.getMemoTitle());
+        editMemoDescription.setText(currentMemo.getMemoDescription());
+        date.setText(DateFormat.format("MM/dd/yyyy",
+                currentMemo.getDate().getTimeInMillis()).toString());
+
+        String selectedPriority = currentMemo.getPrioritySelection();
+        if (selectedPriority != null) {
+            if (selectedPriority.equals("1 - High")) {
+                prioritySelectionRG.check(R.id.radioButtonL1);
+            }
+            else if (selectedPriority.equals("2 - Medium")) {
+                prioritySelectionRG.check(R.id.radioButtonL2);
+            }
+            else if (selectedPriority.equals("3 - Low")) {
+                prioritySelectionRG.check(R.id.radioButtonL3);
+            }
+        }
     }
 
     private void dateButton(){
@@ -65,9 +122,6 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         RadioButton rbL2 = findViewById(R.id.radioButtonL2);
         RadioButton rbL3 = findViewById(R.id.radioButtonL3);
         Button saveBtn = findViewById(R.id.buttonSave);
-        Button listBtn = findViewById(R.id.buttonList);
-        Button settingsBtn = findViewById(R.id.buttonSettings);
-
 
         editMemoName.setEnabled(enabled);
         editInput.setEnabled(enabled);
@@ -76,9 +130,6 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         rbL2.setEnabled(enabled);
         rbL3.setEnabled(enabled);
         saveBtn.setEnabled(enabled);
-        listBtn.setEnabled(enabled);
-        settingsBtn.setEnabled(enabled);
-
 
     }
 
@@ -87,6 +138,68 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         setForEditing(false);
         toggleBtn.setOnClickListener(v -> {
             setForEditing(toggleBtn.isChecked());
+        });
+    }
+
+    private void initTextChangedEvents() {
+        final EditText etMemoName = findViewById(R.id.editTextMemo);
+        etMemoName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentMemo.setMemoTitle(etMemoName.getText().toString());
+            }
+        });
+
+        final EditText etMemoInput = findViewById(R.id.editInput);
+        etMemoInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentMemo.setMemoDescription(etMemoInput.getText().toString());
+            }
+        });
+
+    }
+
+
+
+
+    private void initPriority() {
+        RadioGroup priority = findViewById(R.id.rgLevels);
+        priority.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rbL1 = findViewById(R.id.radioButtonL1);
+                RadioButton rbL2 = findViewById(R.id.radioButtonL2);
+                if(rbL1.isChecked()) {
+                    currentMemo.setPrioritySelection("1 - High");
+                }
+                else if(rbL2.isChecked()){
+                    currentMemo.setPrioritySelection("2 - Medium");
+                }
+                else {
+                    currentMemo.setPrioritySelection("3 - Low");
+                }
+            }
         });
     }
 
@@ -128,6 +241,23 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
 
         });
     }
+
+
+    private void initMemoList() {
+        ImageButton ibMemo = findViewById(R.id.ibMemoList);
+        ibMemo.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
+    }
+    private void initSettingsBtn() {
+        ImageButton ibSettings = findViewById(R.id.ibSettings);
+        ibSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this,Settings.class);
+            startActivity(intent);
+        });
+    }
+
 
 
 }
