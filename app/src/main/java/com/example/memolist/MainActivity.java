@@ -81,6 +81,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        String sortBy = getSharedPreferences("MyMemoListPreferences",
+                MODE_PRIVATE).getString("sortfield", "memotitle");
+        String sortOrder = getSharedPreferences("MyMemoListPreferences",
+                MODE_PRIVATE).getString("sortorder", "ASC");
+        MemoDataSource ds = new MemoDataSource(this);
+
+        try {
+            ds.open();
+            memos = ds.getMemos(sortBy, sortOrder);
+            ds.close();
+            if (memos.size() > 0) {
+                RecyclerView memoList = findViewById(R.id.rvMemos);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+                memoList.setLayoutManager(layoutManager);
+                memoAdapter = new MemoAdapter(memos, this);
+                memoList.setAdapter(memoAdapter);
+
+                memoAdapter.setOnItemClickListener(onItemClickListener);
+            }
+            else {
+                Intent intent = new Intent(MainActivity.this, memoActivity.class);
+                startActivity(intent);
+            }
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Error retrieving contacts", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
 
     private void initAddMemoButton(){
