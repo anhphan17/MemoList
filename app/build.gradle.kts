@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-
+    implementation("it.xabaras.android:recyclerview-swipedecorator:1.4")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
