@@ -11,16 +11,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class MemoAdapter extends RecyclerView.Adapter {
-    private ArrayList<Memo> memoData;
+public class MemoAdapter extends RecyclerView.Adapter{
+    private final ArrayList<Memo> memoData;
+    private ArrayList<Memo> memos;
 
     private View.OnClickListener mOnItemClickListener;
     private boolean isDeleting;
-    private Context parentContext;
+    private final Context parentContext;
+
+    public void updateMemos(ArrayList<Memo> newMemos) {
+        memos.clear();
+        memos.addAll(newMemos);
+
+        memoData.clear();
+        memoData.addAll(newMemos);
+        notifyDataSetChanged();
+    }
 
     public class MemoViewHolder extends RecyclerView.ViewHolder {
         public TextView textViewMemoTitle;
@@ -61,7 +70,8 @@ public class MemoAdapter extends RecyclerView.Adapter {
     }
 
     public MemoAdapter (ArrayList<Memo> arrayList, Context context) {
-        memoData = arrayList;
+        memoData = new ArrayList<>(arrayList);
+        memos = new ArrayList<>(arrayList);
         parentContext = context;
     }
 

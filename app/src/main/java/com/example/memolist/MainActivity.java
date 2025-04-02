@@ -1,18 +1,18 @@
+// MainActivity.java
 package com.example.memolist;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         String sortOrder = getSharedPreferences("MyMemoListPreferences",
                 MODE_PRIVATE).getString("sortorder", "ASC");
 
+
         MemoDataSource ds = new MemoDataSource(this);
 
         try {
@@ -75,8 +75,15 @@ public class MainActivity extends AppCompatActivity {
 
             memoAdapter.setOnItemClickListener(onItemClickListener);
 
-        }
-        catch (Exception e) {
+            String searchQuery = getIntent().getStringExtra("searchQuery");
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                filterMemos(searchQuery);
+            } else {
+                clearSearchQuery();
+            }
+
+
+        } catch (Exception e) {
             Toast.makeText(this, "Error retrieving memos", Toast.LENGTH_LONG).show();
         }
     }
@@ -88,34 +95,32 @@ public class MainActivity extends AppCompatActivity {
                 MODE_PRIVATE).getString("sortfield", "memotitle");
         String sortOrder = getSharedPreferences("MyMemoListPreferences",
                 MODE_PRIVATE).getString("sortorder", "ASC");
-        MemoDataSource ds = new MemoDataSource(this);
 
+
+
+        MemoDataSource ds = new MemoDataSource(this);
         try {
             ds.open();
             memos = ds.getMemos(sortBy, sortOrder);
             ds.close();
-            if (memos.size() > 0) {
-                RecyclerView memoList = findViewById(R.id.rvMemos);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-                memoList.setLayoutManager(layoutManager);
-                memoAdapter = new MemoAdapter(memos, this);
-                memoList.setAdapter(memoAdapter);
 
-                memoAdapter.setOnItemClickListener(onItemClickListener);
+            // Ensure adapter is updated with full list first
+            memoAdapter.updateMemos(memos);
+
+            // Retrieve search query from preferences
+            String searchQuery = getSharedPreferences("MyMemoListPreferences",
+                    MODE_PRIVATE).getString("searchQuery", "");
+
+            // Apply filtering if a search query exists
+            if (!searchQuery.isEmpty()) {
+                filterMemos(searchQuery);
             }
-            else {
-                Intent intent = new Intent(MainActivity.this, memoActivity.class);
-                startActivity(intent);
-            }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Toast.makeText(this, "Error retrieving contacts", Toast.LENGTH_LONG).show();
         }
     }
 
-
-
-    private void initAddMemoButton(){
+    private void initAddMemoButton() {
         Button newMemo = findViewById(R.id.buttonAddMemo);
         newMemo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,16 +147,37 @@ public class MainActivity extends AppCompatActivity {
         ImageButton ibMemo = findViewById(R.id.ibMemoList);
         ibMemo.setEnabled(false);
     }
+
     private void initSettingsBtn() {
         ImageButton ibSettings = findViewById(R.id.ibSettings);
         ibSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(this,Settings.class);
+            Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         });
     }
 
+    private void filterMemos(@NonNull String query) {
+        Log.d("MainActivity", "Filtering memos with query: " + query);
+        if (query.isEmpty()) {
+            Log.d("MainActivity", "Query is empty, resetting to original list");
+            memoAdapter.updateMemos(memos);
+            return;
+        }
 
+        ArrayList<Memo> filteredMemoList = new ArrayList<>();
+        for (Memo memo : memos) {
+            if (memo.getMemoTitle().toLowerCase().contains(query.toLowerCase()) ||
+                    memo.getMemoDescription().toLowerCase().contains(query.toLowerCase())) {
+                filteredMemoList.add(memo);
+            }
+        }
+        Log.d("MainActivity", "Filtered list size: " + filteredMemoList.size());
+        memoAdapter.updateMemos(filteredMemoList);
+    }
 
-
-
+    private void clearSearchQuery() {
+        getSharedPreferences("MyMemoListPreferences", MODE_PRIVATE)
+                .edit().remove("searchQuery").apply();
+        filterMemos("");
+    }
 }
