@@ -80,10 +80,10 @@ public class MemoDataSource {
         return lastId;
     }
 
-    public ArrayList<Memo> getMemos() {
+    public ArrayList<Memo> getMemos(String sortField, String sortOrder) {
         ArrayList<Memo> memos = new ArrayList<Memo>();
         try {
-            String query = "SELECT * FROM memo";
+            String query = "SELECT * FROM memo ORDER BY " + sortField + " " + sortOrder;
             Cursor cursor = database.rawQuery(query, null);
 
             Memo newMemo;

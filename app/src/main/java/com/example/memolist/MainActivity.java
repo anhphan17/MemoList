@@ -1,11 +1,14 @@
 package com.example.memolist;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +54,18 @@ public class MainActivity extends AppCompatActivity {
         initAddMemoButton();
         initMemoList();
         initSettingsBtn();
+        initDeleteSwitch();
+
+        String sortBy = getSharedPreferences("MyMemoListPreferences",
+                MODE_PRIVATE).getString("sortfield", "memotitle");
+        String sortOrder = getSharedPreferences("MyMemoListPreferences",
+                MODE_PRIVATE).getString("sortorder", "ASC");
 
         MemoDataSource ds = new MemoDataSource(this);
 
         try {
             ds.open();
-            memos = ds.getMemos();
+            memos = ds.getMemos(sortBy, sortOrder);
             ds.close();
             RecyclerView memoList = findViewById(R.id.rvMemos);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -72,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void initAddMemoButton(){
         Button newMemo = findViewById(R.id.buttonAddMemo);
         newMemo.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +90,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, memoActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void initDeleteSwitch() {
+        Switch s = findViewById(R.id.switchDelete);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                Boolean status = compoundButton.isChecked();
+                memoAdapter.setDelete(status);
+                memoAdapter.notifyDataSetChanged();
             }
         });
     }
