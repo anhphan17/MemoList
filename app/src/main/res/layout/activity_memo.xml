@@ -49,22 +49,22 @@
             android:id="@+id/radioButtonL1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Level 1"
-            android:textColor="@color/blue" />
+            android:text="1 - High"
+            android:textColor="@color/red" />
 
         <RadioButton
             android:id="@+id/radioButtonL2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Level 2"
+            android:text="2 - Medium"
             android:textColor="@color/green" />
 
         <RadioButton
             android:id="@+id/radioButtonL3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Level 3"
-            android:textColor="@color/red" />
+            android:text="3 - Low"
+            android:textColor="@color/blue" />
     </RadioGroup>
 
     <Button

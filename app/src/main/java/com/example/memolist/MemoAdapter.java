@@ -93,14 +93,14 @@ public class MemoAdapter extends RecyclerView.Adapter {
         int colorRed = parentContext.getResources().getColor(R.color.red);
 
         if (priority != null) {
-            if (priority.equals("Level 1")) {
-                mvh.getPrioritySelectionTextView().setTextColor(colorBlue);
+            if (priority.equals("1 - High")) {
+                mvh.getPrioritySelectionTextView().setTextColor(colorRed);
             }
-            else if (priority.equals("Level 2")) {
+            else if (priority.equals("2 - Medium")) {
                 mvh.getPrioritySelectionTextView().setTextColor(colorGreen);
             }
-            else if (priority.equals("Level 3")) {
-                mvh.getPrioritySelectionTextView().setTextColor(colorRed);
+            else if (priority.equals("3 - Low")) {
+                mvh.getPrioritySelectionTextView().setTextColor(colorBlue);
             }
         }
 

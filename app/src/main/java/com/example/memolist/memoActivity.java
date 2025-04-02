@@ -85,13 +85,13 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
 
         String selectedPriority = currentMemo.getPrioritySelection();
         if (selectedPriority != null) {
-            if (selectedPriority.equals("Level 1")) {
+            if (selectedPriority.equals("1 - High")) {
                 prioritySelectionRG.check(R.id.radioButtonL1);
             }
-            else if (selectedPriority.equals("Level 2")) {
+            else if (selectedPriority.equals("2 - Medium")) {
                 prioritySelectionRG.check(R.id.radioButtonL2);
             }
-            else if (selectedPriority.equals("Level 3")) {
+            else if (selectedPriority.equals("3 - Low")) {
                 prioritySelectionRG.check(R.id.radioButtonL3);
             }
         }
@@ -191,13 +191,13 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
                 RadioButton rbL1 = findViewById(R.id.radioButtonL1);
                 RadioButton rbL2 = findViewById(R.id.radioButtonL2);
                 if(rbL1.isChecked()) {
-                    currentMemo.setPrioritySelection("Level 1");
+                    currentMemo.setPrioritySelection("1 - High");
                 }
                 else if(rbL2.isChecked()){
-                    currentMemo.setPrioritySelection("Level 2");
+                    currentMemo.setPrioritySelection("2 - Medium");
                 }
                 else {
-                    currentMemo.setPrioritySelection("Level 3");
+                    currentMemo.setPrioritySelection("3 - Low");
                 }
             }
         });
