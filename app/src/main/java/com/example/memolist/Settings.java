@@ -27,6 +27,7 @@ public class Settings extends AppCompatActivity {
         initSettingsBtn();
         initSettings();
         initSortByClick();
+        initOrderByClick();
     }
 
     private void initMemoList() {
@@ -72,14 +73,32 @@ public class Settings extends AppCompatActivity {
     private void initSortByClick() {
         RadioGroup rgSort = findViewById(R.id.rgSort);
         rgSort.setOnCheckedChangeListener((group, checkedId) -> {
-           RadioButton rbAsc = findViewById(R.id.rbASC);
-           if (rbAsc.isChecked()) {
-               getSharedPreferences("MyMemoListPreferences", MODE_PRIVATE)
-                       .edit().putString("sortorder", "ASC").apply();
-           } else {
-               getSharedPreferences("MyMemoListPreferences", MODE_PRIVATE)
-                       .edit().putString("sortorder", "DESC").apply();
-           }
+            RadioButton rbTitle = findViewById(R.id.rbTitle);
+            RadioButton rbDate = findViewById(R.id.rbDate);
+            if (rbTitle.isChecked()){
+                getSharedPreferences("MyMemoListPreferences", MODE_PRIVATE)
+                        .edit().putString("sortfield", "memotitle").apply();
+            } else if (rbDate.isChecked()) {
+                getSharedPreferences("MyMemoListPreferences", MODE_PRIVATE)
+                        .edit().putString("sortfield", "date").apply();
+            } else {
+                getSharedPreferences("MyMemoListPreferences", MODE_PRIVATE)
+                        .edit().putString("sortfield", "priorityselection").apply();
+            }
+        });
+    }
+
+    private void initOrderByClick() {
+        RadioGroup rgSort = findViewById(R.id.rgOrder);
+        rgSort.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton rbAsc = findViewById(R.id.rbASC);
+            if (rbAsc.isChecked()) {
+                getSharedPreferences("MyMemoListPreferences", MODE_PRIVATE)
+                        .edit().putString("sortorder", "ASC").apply();
+            } else {
+                getSharedPreferences("MyMemoListPreferences", MODE_PRIVATE)
+                        .edit().putString("sortorder", "DESC").apply();
+            }
         });
     }
 
