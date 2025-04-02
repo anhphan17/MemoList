@@ -3,7 +3,9 @@ package com.example.memolist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -26,20 +28,32 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        addButton();
+
+        initAddMemoButton();
+        initMemoList();
+        initSettingsBtn();
     }
 
-    private void addButton(){
-        Button add = findViewById(R.id.buttonAddMemo);
-        add.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, memoActivity.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+    private void initAddMemoButton(){
+        Button newMemo = findViewById(R.id.buttonAddMemo);
+        newMemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, memoActivity.class);
+                startActivity(intent);
+            }
         });
     }
 
-
-
-
-
+    private void initMemoList() {
+        ImageButton ibMemo = findViewById(R.id.ibMemoList);
+        ibMemo.setEnabled(false);
+    }
+    private void initSettingsBtn() {
+        ImageButton ibSettings = findViewById(R.id.ibSettings);
+        ibSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this,Settings.class);
+            startActivity(intent);
+        });
+    }
 }

@@ -68,28 +68,6 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/buttonList"
-        android:layout_width="118dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/blue"
-        android:text="List"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/buttonSettings"
-        android:layout_width="125dp"
-        android:layout_height="49dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/blue"
-        android:text="Settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
         android:id="@+id/buttonDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -105,10 +83,9 @@
         android:layout_width="87dp"
         android:layout_height="25dp"
         android:layout_marginEnd="64dp"
-        android:layout_marginBottom="60dp"
         android:text="01/30/2000"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSettings"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="573dp" />
 
     <LinearLayout
         android:layout_width="406dp"
@@ -135,6 +112,37 @@
             android:backgroundTint="@color/blue"
             android:text="Save" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/ibMemoList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/goes_to_the_memo_list_layout"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:srcCompat="@android:drawable/ic_menu_agenda" />
+
+        <ImageButton
+            android:id="@+id/ibSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/settings_layout_diabled"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:srcCompat="@android:drawable/ic_menu_manage" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

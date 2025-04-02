@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class MemoDataSource {
 
     private SQLiteDatabase database;
@@ -76,6 +79,47 @@ public class MemoDataSource {
         }
         return lastId;
     }
+
+    public ArrayList<Memo> getMemos() {
+        ArrayList<Memo> memos = new ArrayList<Memo>();
+        try {
+            String query = "SELECT * FROM memo";
+            Cursor cursor = database.rawQuery(query, null);
+
+            Memo newMemo;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                newMemo = new Memo();
+                newMemo.setMemoID(cursor.getInt(0));
+                newMemo.setMemoTitle(cursor.getString(1));
+                newMemo.setMemoDescription(cursor.getString(2));
+                newMemo.setPrioritySelection(cursor.getString(3));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(Long.valueOf(cursor.getString(4)));
+                newMemo.setDate(calendar);
+                memos.add(newMemo);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        catch (Exception e) {
+            memos = new ArrayList<Memo>();
+        }
+        return memos;
+    }
+
+    public boolean deleteMemo(int memoId) {
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("memo", "id=" + memoId, null) > 0;
+        }
+        catch (Exception e) {
+
+        }
+        return didDelete;
+    }
+
+
 
 
 }

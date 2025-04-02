@@ -75,9 +75,6 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         RadioButton rbL2 = findViewById(R.id.radioButtonL2);
         RadioButton rbL3 = findViewById(R.id.radioButtonL3);
         Button saveBtn = findViewById(R.id.buttonSave);
-        Button listBtn = findViewById(R.id.buttonList);
-        Button settingsBtn = findViewById(R.id.buttonSettings);
-
 
         editMemoName.setEnabled(enabled);
         editInput.setEnabled(enabled);
@@ -86,9 +83,6 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         rbL2.setEnabled(enabled);
         rbL3.setEnabled(enabled);
         saveBtn.setEnabled(enabled);
-        listBtn.setEnabled(enabled);
-        settingsBtn.setEnabled(enabled);
-
 
     }
 
@@ -211,7 +205,10 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
     }
     private void initSettingsBtn() {
         ImageButton ibSettings = findViewById(R.id.ibSettings);
-        ibSettings.setEnabled(false);
+        ibSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this,Settings.class);
+            startActivity(intent);
+        });
     }
 
 
