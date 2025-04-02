@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Level 1"
-            android:textColor="@color/gray" />
+            android:textColor="@color/blue" />
 
         <RadioButton
             android:id="@+id/radioButtonL2"

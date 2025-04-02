@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
@@ -40,6 +41,16 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
             return insets;
         });
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            initMemo(extras.getInt("memoID"));
+        }
+        else {
+            currentMemo = new Memo();
+        }
+
+
+        setForEditing(false);
         dateButton();
         toggleButton();
         saveButton();
@@ -48,6 +59,42 @@ public class memoActivity extends AppCompatActivity implements DatePickerDialog.
         initSettingsBtn();
         initMemoList();
 
+
+    }
+
+    private void initMemo(int id) {
+        MemoDataSource ds = new MemoDataSource(memoActivity.this);
+        try {
+            ds.open();
+            currentMemo = ds.getSpecificMemo(id);
+            ds.close();
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Load Contact Failed.", Toast.LENGTH_LONG).show();
+        }
+
+        EditText editMemoName = findViewById(R.id.editTextMemo);
+        EditText editMemoDescription = findViewById(R.id.editInput);
+        TextView date = findViewById(R.id.textViewMemoDate);
+        RadioGroup prioritySelectionRG = findViewById(R.id.rgLevels);
+
+        editMemoName.setText(currentMemo.getMemoTitle());
+        editMemoDescription.setText(currentMemo.getMemoDescription());
+        date.setText(DateFormat.format("MM/dd/yyyy",
+                currentMemo.getDate().getTimeInMillis()).toString());
+
+        String selectedPriority = currentMemo.getPrioritySelection();
+        if (selectedPriority != null) {
+            if (selectedPriority.equals("Level 1")) {
+                prioritySelectionRG.check(R.id.radioButtonL1);
+            }
+            else if (selectedPriority.equals("Level 2")) {
+                prioritySelectionRG.check(R.id.radioButtonL2);
+            }
+            else if (selectedPriority.equals("Level 3")) {
+                prioritySelectionRG.check(R.id.radioButtonL3);
+            }
+        }
     }
 
     private void dateButton(){

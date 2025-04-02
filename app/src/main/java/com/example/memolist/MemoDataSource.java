@@ -119,6 +119,25 @@ public class MemoDataSource {
         return didDelete;
     }
 
+    public Memo getSpecificMemo(int memoId) {
+        Memo memo = new Memo();
+        String query = "SELECT * FROM memo WHERE id=" + memoId;
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            memo.setMemoID(cursor.getInt(0));
+            memo.setMemoTitle(cursor.getString(1));
+            memo.setMemoDescription(cursor.getString(2));
+            memo.setPrioritySelection(cursor.getString(3));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(Long.valueOf(cursor.getString(4)));
+            memo.setDate(calendar);
+
+            cursor.close();
+        }
+        return memo;
+    }
+
 
 
 

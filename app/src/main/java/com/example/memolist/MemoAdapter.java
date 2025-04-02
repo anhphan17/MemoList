@@ -80,10 +80,29 @@ public class MemoAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MemoViewHolder mvh = (MemoViewHolder) holder;
-        mvh.getMemoTextView().setText(memoData.get(position).getMemoTitle());
-        mvh.getDescriptionTextView().setText(memoData.get(position).getMemoDescription());
-        mvh.getPrioritySelectionTextView().setText(memoData.get(position).getPrioritySelection());
-        mvh.getDateTextView().setText(memoData.get(position).getDateAsString());
+        Memo memo = memoData.get(position);
+
+        mvh.getMemoTextView().setText(memo.getMemoTitle());
+        mvh.getDescriptionTextView().setText(memo.getMemoDescription());
+        mvh.getPrioritySelectionTextView().setText(memo.getPrioritySelection());
+        mvh.getDateTextView().setText(memo.getDateAsString());
+
+        String priority = memo.getPrioritySelection();
+        int colorBlue = parentContext.getResources().getColor(R.color.blue);
+        int colorGreen = parentContext.getResources().getColor(R.color.green);
+        int colorRed = parentContext.getResources().getColor(R.color.red);
+
+        if (priority != null) {
+            if (priority.equals("Level 1")) {
+                mvh.getPrioritySelectionTextView().setTextColor(colorBlue);
+            }
+            else if (priority.equals("Level 2")) {
+                mvh.getPrioritySelectionTextView().setTextColor(colorGreen);
+            }
+            else if (priority.equals("Level 3")) {
+                mvh.getPrioritySelectionTextView().setTextColor(colorRed);
+            }
+        }
 
         if (isDeleting) {
             mvh.getDeleteButton().setVisibility(View.VISIBLE);

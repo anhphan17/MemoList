@@ -52,7 +52,7 @@ public class Memo {
     }
 
     public String getDateAsString() {
-        SimpleDateFormat dateString = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat dateString = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
         return dateString.format(date.getTime());
     }
 

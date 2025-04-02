@@ -7,16 +7,35 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<Memo> memos;
+    private MemoAdapter memoAdapter;
+
+    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+            int memoID = memos.get(position).getMemoID();
+            Intent intent = new Intent(MainActivity.this, memoActivity.class);
+            intent.putExtra("memoID", memoID);
+            startActivity(intent);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +51,25 @@ public class MainActivity extends AppCompatActivity {
         initAddMemoButton();
         initMemoList();
         initSettingsBtn();
+
+        MemoDataSource ds = new MemoDataSource(this);
+
+        try {
+            ds.open();
+            memos = ds.getMemos();
+            ds.close();
+            RecyclerView memoList = findViewById(R.id.rvMemos);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            memoList.setLayoutManager(layoutManager);
+            memoAdapter = new MemoAdapter(memos, this);
+            memoList.setAdapter(memoAdapter);
+
+            memoAdapter.setOnItemClickListener(onItemClickListener);
+
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Error retrieving memos", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initAddMemoButton(){
